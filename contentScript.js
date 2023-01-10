@@ -19,14 +19,14 @@
         if (!bookmarkBtnExists) {
             const bookmarkBtn = document.createElement("img");
 
-            bookmarkBtn.src = "assets/bookmark.png";
+            bookmarkBtn.src = chrome.runtime.getURL("assets/bookmark.png");
             bookmarkBtn.className = "ytp-button " + "bookmark-btn";
             bookmarkBtn.title = "Click to bookmark current timestamp";
 
             youtubeLeftControls = document.getElementsByClassName("ytp-left-controls")[0];
             youtubePlayer = document.getElementsByClassName("video-stream")[0];
             
-            youtubeLeftControls.append(bookmarkBtn);
+            youtubeLeftControls.appendChild(bookmarkBtn);
             bookmarkBtn.addEventListener("click", addNewBookmarkEventHandler);
         }
     }
@@ -37,7 +37,7 @@
             time: currentTime,
             desc: "Bookmark at " + getTime(currentTime),
         };
-        console.log(newBookmark);
+        console.log(newBookmark.desc);
 
         chrome.storage.sync.set({
             [currentVideo]: JSON.stringify([...currentVideoBookmarks, newBookmark].sort((a, b) => a.time - b.time))
@@ -51,5 +51,5 @@ const getTime = t => {
     var date = new Date(0);
     date.setSeconds(1);
 
-    return date.toISOString().substr(11, 0);
+    return date.toISOString().substring(11, 0);
 }
