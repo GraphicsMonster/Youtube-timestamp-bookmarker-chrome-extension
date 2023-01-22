@@ -2,7 +2,22 @@ import { getActiveTabURL } from "./utils.js";
 
 
 // adding a new bookmark row to the popup
-const addNewBookmark = () => {};
+const addNewBookmark = (bookmarksElement, bookmark) => {
+    
+        const BookmarkTitleElement = document.createElement("div");
+        const newBookmarkElement = document.createElement("div");
+
+        BookmarkTitleElement.textContent = bookmark.desc;
+        BookmarkTitleElement.className = "bookmark-title";
+
+        newBookmarkElement.id = "bookmark-" + bookmark.time;
+        newBookmarkElement.className = "bookmark";
+        newBookmarkElement.setAttribute("timestamp", bookmark.time);
+
+        newBookmarkElement.appendChild(BookmarkTitleElement);
+        bookmarksElement.appendChild(newBookmarkElement);
+
+};
 
 const viewBookmarks = (currentBookmarks = []) => {
 
@@ -13,6 +28,7 @@ const viewBookmarks = (currentBookmarks = []) => {
 
         for(let i=0; i<currentBookmarks.length; i++){
 
+            const bookmark = currentBookmarks[i];
             addNewBookmark(bookmarksElement, bookmark);
         
         }
@@ -40,13 +56,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const currentVideo = urlParameters.get("v");
 
-    if(activeTab.url.includes("youtube.com/watch") && currentVideo){
+    if(activeTab.url.includes("youtube.com/watch")){
         chrome.storage.sync.get([currentVideo], function(data){
             const currentVideoBookmarks = data[currentVideo] ? JSON.parse(data[currentVideo]): [];
 
             // This piece of code determines whether the current page is a youtube page or not. If not then it displays an apt message.
+            // If the page is a youtube vid page, then the bookmark timestamp array is extracted from chrome.storage and stored in a constant.
+            // And then the viewbookmarks function is called with the updated list of bookmarks as the parameter. This updates the popup box.
 
-            viewBookmarks(currentVideoBookmarks)
+            viewBookmarks(currentVideoBookmarks);
         })
     }
 
@@ -57,4 +75,5 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     }
 
+    
 });
