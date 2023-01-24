@@ -4,6 +4,7 @@ import { getActiveTabURL } from "./utils.js";
 // adding a new bookmark row to the popup
 const addNewBookmark = (bookmarksElement, bookmark) => {
     
+    //It adds to the list of existing bookmarks list. BookmarksElement is the html div where the bookmarks are placed and bookamrk is an object containing information for the latest timestamp bookmark like time and description.
         const BookmarkTitleElement = document.createElement("div");
         const newBookmarkElement = document.createElement("div");
 
@@ -21,8 +22,11 @@ const addNewBookmark = (bookmarksElement, bookmark) => {
 
 const viewBookmarks = (currentBookmarks = []) => {
 
+
+    //Shows all the bookmarks in the popup.
       const bookmarksElement = document.getElementById("bookmarks");
       bookmarksElement.innerHTML = "";
+      console.log(currentBookmarks.length)
 
       if(currentBookmarks.length>0){
 

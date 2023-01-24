@@ -21,8 +21,10 @@
     }
 
     const newVideoLoaded = async () => {
+
+        //This function checks if the bookmark button already exist in a page and deploys one if it isn't.
         const bookmarkBtnExists = document.getElementsByClassName("bookmark-btn")[0];
-        //currentVideoBookmarks = await fetchBookmarks();
+        currentVideoBookmarks = await fetchBookmarks();
         console.log(bookmarkBtnExists);
 
         if (!bookmarkBtnExists) {
@@ -40,7 +42,10 @@
         }
     }
 
+    // newVideoLoaded();
+
     const addNewBookmarkEventHandler = async () => {
+        //This function handles the event when the bookmark btn is clicked. It adds the timestamp to chrome storage.
         const currentTime = youtubePlayer.currentTime;
         const newBookmark = {
             time: currentTime,
