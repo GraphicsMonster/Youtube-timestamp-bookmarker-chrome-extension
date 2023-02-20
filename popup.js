@@ -26,7 +26,7 @@ const viewBookmarks = (currentBookmarks = []) => {
     //Shows all the bookmarks in the popup.
       const bookmarksElement = document.getElementById("bookmarks");
       bookmarksElement.innerHTML = "";
-      console.log(currentBookmarks.length)
+      
 
       if(currentBookmarks.length>0){
 
