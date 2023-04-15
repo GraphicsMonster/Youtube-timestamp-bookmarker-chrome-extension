@@ -1,5 +1,7 @@
 import { getActiveTabURL } from "./utils.js";
 
+const chrome = window.chrome;
+
 
 // adding a new bookmark row to the popup
 const addNewBookmark = (bookmarksElement, bookmark) => {
@@ -20,20 +22,21 @@ const addNewBookmark = (bookmarksElement, bookmark) => {
 
 };
 
-const viewBookmarks = (currentBookmarks = []) => {
+const viewBookmarks = (currentBookmarks) => {
 
 
     //Shows all the bookmarks in the popup.
       const bookmarksElement = document.getElementById("bookmarks");
       bookmarksElement.innerHTML = "";
       
-
       if(currentBookmarks.length>0){
 
         for(let i=0; i<currentBookmarks.length; i++){
 
             const bookmark = currentBookmarks[i];
             addNewBookmark(bookmarksElement, bookmark);
+            console.log(bookmark.desc);
+            console.log(bookmark.time)
         
         }
       }
@@ -53,6 +56,8 @@ const onDelete = e => {};
 const setBookmarkAttributes =  () => {};
 
 document.addEventListener("DOMContentLoaded", async () => {
+
+   
 
     const activeTab = await getActiveTabURL();
     const queryParameters = activeTab.url.split("?")[1];
@@ -78,6 +83,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         container.innerHTML = '<div class="title">This is not a youtube video page. </div>';
 
     }
+
+    chrome.storage.onChanged.addListener((changes, areaName) => {
+
+        console.log("The chrome.storage.onChanged event listener is being triggered.")
+    
+        if(changes[currentVideo]) {
+            currentVideoBookmarks = JSON.parse(changes[currentVideo].newValue);
+            viewBookmarks(currentVideoBookmarks);
+        }
+    
+    });
 
     
 });
