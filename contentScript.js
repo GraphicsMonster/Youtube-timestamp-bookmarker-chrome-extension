@@ -27,7 +27,6 @@
         //This function checks if the bookmark button already exist in a page and deploys one if it isn't.
         const bookmarkBtnExists = document.getElementsByClassName("bookmark-btn")[0];
         currentVideoBookmarks = await fetchBookmarks();
-        console.log(bookmarkBtnExists);
 
         if (!bookmarkBtnExists) {
             const bookmarkBtn = document.createElement("img");

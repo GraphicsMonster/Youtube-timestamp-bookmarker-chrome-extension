@@ -23,7 +23,7 @@ const addNewBookmark = (bookmarksElement, bookmark) => {
 };
 
 const viewBookmarks = (currentBookmarks) => {
-
+    debugger;
 
     //Shows all the bookmarks in the popup.
       const bookmarksElement = document.getElementById("bookmarks");
@@ -49,6 +49,39 @@ const viewBookmarks = (currentBookmarks) => {
 
 };
 
+
+const updatePopup = async () => {
+
+    const activeTab = await getActiveTabURL();
+    const queryParameters = activeTab.url.split("?")[1];
+    const urlParameters = new URLSearchParams(queryParameters);
+  
+    const currentVideo = urlParameters.get("v");
+  
+    if (activeTab.url.includes("youtube.com/watch")) {
+
+      chrome.storage.sync.get([currentVideo], function (data) {
+
+        const currentVideoBookmarks = data[currentVideo]
+          ? JSON.parse(data[currentVideo])
+          : [];
+  
+        viewBookmarks(currentVideoBookmarks);
+
+      });
+    } 
+    
+    else {
+
+      const container = document.getElementsByClassName("container")[0];
+      container.innerHTML =
+        '<div class="title">This is not a youtube video page. </div>';
+
+    }
+  };
+
+
+
 const onPlay = e => {};
 
 const onDelete = e => {};
@@ -63,11 +96,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     const queryParameters = activeTab.url.split("?")[1];
     const urlParameters = new URLSearchParams(queryParameters);
 
+    let currentVideoBookmarks = [];
+    console.log("statement right before if and else statements for chrome.storage.")
     const currentVideo = urlParameters.get("v");
-
+ 
     if(activeTab.url.includes("youtube.com/watch")){
         chrome.storage.sync.get([currentVideo], function(data){
-            const currentVideoBookmarks = data[currentVideo] ? JSON.parse(data[currentVideo]): [];
+            currentVideoBookmarks = data[currentVideo] ? JSON.parse(data[currentVideo]): [];
 
             // This piece of code determines whether the current page is a youtube page or not. If not then it displays an apt message.
             // If the page is a youtube vid page, then the bookmark timestamp array is extracted from chrome.storage and stored in a constant.
@@ -83,14 +118,14 @@ document.addEventListener("DOMContentLoaded", async () => {
         container.innerHTML = '<div class="title">This is not a youtube video page. </div>';
 
     }
-
+    
     chrome.storage.onChanged.addListener((changes, areaName) => {
 
         console.log("The chrome.storage.onChanged event listener is being triggered.")
     
         if(changes[currentVideo]) {
             currentVideoBookmarks = JSON.parse(changes[currentVideo].newValue);
-            viewBookmarks(currentVideoBookmarks);
+            updatePopup();
         }
     
     });
