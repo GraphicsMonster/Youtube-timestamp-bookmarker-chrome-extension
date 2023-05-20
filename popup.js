@@ -119,7 +119,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         container.innerHTML = '<div class="title">This is not a youtube video page. </div>';
 
     }
-
     chrome.storage.onChanged.addListener((changes, areaName) => {
 
         console.log("The chrome.storage.onChanged event listener is being triggered.")
